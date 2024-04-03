@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+
+# Virtual Environment
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# Compiled files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+.env
+
+# Generated files
+*.csv
+*.db
+*.sqlite
+*.sql
+*.xlsx
+*.xls
+*.pkl
+*.pickle
+*.mp3
+*.mp4
+*.mov
+*.wav
