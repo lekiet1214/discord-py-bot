@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()  # load all the variables from the env file
 bot = discord.AutoShardedBot(intents=discord.Intents.all())
 
+
 @bot.slash_command(name="hello", description="Say hello to the bot")
 async def hello(ctx):
     # send response to the user, only the user can see the response
@@ -25,7 +26,6 @@ async def once_done(sink: discord.sinks, *args):
     for user_id, audio in sink.audio_data.items():
         with open(f"{user_id}.{sink.encoding}", "wb") as f:
             f.write(audio.file.getbuffer())
-    
 
 
 @bot.command()
@@ -33,11 +33,11 @@ async def record(ctx):  # If you're using commands.Bot, this will also work.
     # if not owner, return
     if str(ctx.author.id) != str(os.getenv('OWNER_ID')):
         return await ctx.response.send_message("You thought you could use this command? Think again!", ephemeral=True)
-    
+
     voice = ctx.author.voice
 
     if not voice:
-        await ctx.response.send_message("You aren't in a voice channel!", ephemeral=True) 
+        await ctx.response.send_message("You aren't in a voice channel!", ephemeral=True)
 
     # Connect to the voice channel the author is in.
     vc = await voice.channel.connect()
@@ -65,6 +65,8 @@ async def stop_recording(ctx):
         await ctx.response.send_message("I am currently not recording here.", ephemeral=True)
 
 # handle direct messages
+
+
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -74,18 +76,22 @@ async def on_message(message):
     await bot.process_commands(message)
 
 # Events handling
+
+
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
 
 # Handle voice disconnect
+
+
 @bot.event
 async def on_voice_state_update(member, before, after):
     if member == bot.user:
         if before.channel and not after.channel:
             if member.guild.id in connections:
                 del connections[member.guild.id]
-                
+
 
 bot.run(str(os.getenv('DISCORD_TOKEN')))  # run the bot with the token
