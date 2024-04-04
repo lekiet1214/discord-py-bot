@@ -5,12 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()  # load all the variables from the env file
 bot = discord.AutoShardedBot(intents=discord.Intents.all())
 
-# Events handling
-@bot.event
-async def on_ready():
-    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
-    print('------')
-
 @bot.slash_command(name="hello", description="Say hello to the bot")
 async def hello(ctx):
     # send response to the user, only the user can see the response
@@ -79,6 +73,19 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+# Events handling
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print('------')
 
+# Handle voice disconnect
+@bot.event
+async def on_voice_state_update(member, before, after):
+    if member == bot.user:
+        if before.channel and not after.channel:
+            if member.guild.id in connections:
+                del connections[member.guild.id]
+                
 
 bot.run(str(os.getenv('DISCORD_TOKEN')))  # run the bot with the token
